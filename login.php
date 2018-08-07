@@ -12,9 +12,10 @@
               $cstrong = True;
               $token = bin2hex(openssl_random_pseudo_bytes(64,$cstrong));
               $user_id = DB::query('SELECT id FROM users WHERE username = :username', array(':username' => $username))[0]['id'];
-              DB::query('INSERT INTO login_tokens VALUES (\'\', :token, :user_id)', array(':token' => sha1($token), ':user_id' => $user_id));
+              DB::query('INSERT INTO login_tokens VALUES (\'\', :username, :token, :user_id)', array(':username'=>$username,':token' => sha1($token), ':user_id' => $user_id));
 
               setcookie('SNID', $token, time() + 60 * 60 * 24 * 7, '/', NULL, NULL, True);
+              setcookie('SNID_', '1', time() + 60 * 60 * 24 * 3, '/', NULL, NULL, True);
 
           } else {
              echo 'Неправильный логин или пароль';
